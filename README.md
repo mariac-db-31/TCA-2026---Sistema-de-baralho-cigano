@@ -1,2 +1,2 @@
-# TCA-2026---Sistema-de-baralho-cigarro
+# TCA-2026---Sistema-de-baralho-cigano
 // Nesse sistema, meu objetivo é criar uma experiência imersiva do famoso oráculo baralho cigano. A ideia é: o jogador (aqui nomeado de "consulente", assim como no jogo da vida real) faz uma pergunta sobre seu futuro ("Eu passarei nessa prova?", "El* me ama?", "Meu papagaio se daria bem com um gato?", etc), e o sistema do jogo lançará "cartas" referentes ao tema, para assim, o jogador interpretará-las ao seu grado. Meu sistema conta com 40 cartas, assim como algumas versões do baralho cigano Lenormand.

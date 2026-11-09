@@ -221,5 +221,4 @@ const arcanos = [
         significado: "Positivo: superação, aprendizado e fortalecimento. Negativo: preocupações, dificuldades e responsabilidades pesadas."
       }
     ];
-    
 

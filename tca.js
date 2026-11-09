@@ -144,7 +144,7 @@ const arcanos = [
         nome: "A Montanha", tag: "desafios",
         arcanosFavoraveis: [4, 9, 11, 12],
         significado: "Positivo: perseverança e superação de obstáculos. Negativo: bloqueios, atrasos e dificuldades."
-      },
+      },_
       {
         nome: "Os Caminhos", tag: "decisoes",
         arcanosFavoraveis: [1, 6, 7, 10],

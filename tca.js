@@ -230,28 +230,31 @@ const arcanos = [
         return this.cartas.filter(carta => carta.tag === tema);
       }
     
-      calcularPeso(carta, arcano) {
-        return carta.arcanosFavoraveis.includes(arcano) ? 3 : 1;
+      calcularPeso(carta, arcano, tema) {
+        let peso = 1;
+        if (carta.arcanosFavoraveis.includes(arcano)) peso += 2; 
+        if (carta.tag === tema) peso += 5;                       
+        return peso;
       }
-    
-      sortearCarta(disponiveis, arcano) {
-        const pesos = disponiveis.map(carta => this.calcularPeso(carta, arcano));
+      
+      sortearCarta(disponiveis, arcano, tema) {
+        const pesos = disponiveis.map(carta => this.calcularPeso(carta, arcano, tema));
         const total = pesos.reduce((a, b) => a + b, 0);
         let sorteio = Math.random() * total;
-    
+      
         for (let i = 0; i < disponiveis.length; i++) {
           sorteio -= pesos[i];
           if (sorteio < 0) return disponiveis[i];
         }
         return disponiveis[disponiveis.length - 1];
       }
-    
+      
       consultar(tema, arcano) {
-        let disponiveis = this.filtrarCartas(tema);
+        let disponiveis = [...this.cartas];
         const resultado = [];
-    
+      
         for (let i = 0; i < 3 && disponiveis.length > 0; i++) {
-          const carta = this.sortearCarta(disponiveis, arcano);
+          const carta = this.sortearCarta(disponiveis, arcano, tema);
           resultado.push(carta);
           disponiveis = disponiveis.filter(c => c !== carta);
         }

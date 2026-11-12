@@ -1,4 +1,3 @@
-let consulente = prompt(parseFloat("Qual é seu nome?"))
 const arcanos = [
     "O Louco", "O Mago", "A Sacerdotisa", "A Imperatriz", "O Imperador",
     "O Hierofante", "Os Enamorados", "O Carro", "A Justiça", "O Eremita",
@@ -18,11 +17,12 @@ const arcanos = [
     
     
     const data = prompt("Qual é sua data de nascimento? (dd/mm/aaaa) ");
-    const parte = data.split("/"); 
+    const parte = data ? data.split("/") : [];
     const dia = parseInt(parte[0]);
     const mes = parseInt(parte[1]);
     const ano = parseInt(parte[2]);
-    
+
+    let arcano = null
     
     if (parte.length !== 3 || isNaN(dia) || isNaN(mes) || isNaN(ano) || dia < 1 || dia > 31 || mes < 1 || mes > 12) {
     console.log("Data inválida!");
@@ -32,12 +32,12 @@ const arcanos = [
     
     
     while (total > 22) {
-    total = somarDigitos(total);
-    console.log("Reduzido:", total);
+      total = somarDigitos(total);
+      console.log("Reduzido:", total);
     }
-    const posicao = total === 22 ? 0 : total;
-    console.log("\nSeu arcano pessoal é o " + total + ": " + arcanos[posicao]);
-    }
+    arcano = total === 22 ? 0 : total;
+    console.log("\nSeu arcano pessoal é o " + total + ": " + arcanos[arcano]);
+  }
 
     const baralho = [
       {
@@ -144,7 +144,7 @@ const arcanos = [
         nome: "A Montanha", tag: "desafios",
         arcanosFavoraveis: [4, 9, 11, 12],
         significado: "Positivo: perseverança e superação de obstáculos. Negativo: bloqueios, atrasos e dificuldades."
-      },_
+      },
       {
         nome: "Os Caminhos", tag: "decisoes",
         arcanosFavoraveis: [1, 6, 7, 10],
@@ -201,24 +201,87 @@ const arcanos = [
         significado: "Positivo: intuição, criatividade, reconhecimento e sensibilidade. Negativo: instabilidade emocional, ilusões e insegurança."
       },
       {
-        nome: "A Chave", tag: "solucoes",
-        arcanosFavoraveis: [1, 10, 19, 21],
-        significado: "Positivo: respostas, soluções, oportunidades e conquistas. Negativo: dificuldade para encontrar soluções e oportunidades desperdiçadas."
+      nome: "A Chave", tag: "solucoes",
+      arcanosFavoraveis: [1, 10, 19, 21],
+      significado: "Positivo: respostas, soluções, oportunidades e conquistas. Negativo: dificuldade para encontrar soluções e oportunidades desperdiçadas."
       },
       {
-        nome: "Os Peixes", tag: "dinheiro",
-        arcanosFavoraveis: [3, 10, 15, 19],
-        significado: "Positivo: abundância, prosperidade e crescimento financeiro. Negativo: descontrole financeiro, desperdício e interesses materiais excessivos."
+      nome: "Os Peixes", tag: "dinheiro",
+      arcanosFavoraveis: [3, 10, 15, 19],
+      significado: "Positivo: abundância, prosperidade e crescimento financeiro. Negativo: descontrole financeiro, desperdício e interesses materiais excessivos."
       },
       {
-        nome: "A Âncora", tag: "trabalho",
-        arcanosFavoraveis: [4, 7, 11, 14],
-        significado: "Positivo: segurança, estabilidade e persistência. Negativo: estagnação, apego e resistência ao progresso."
+      nome: "A Âncora", tag: "trabalho",
+      arcanosFavoraveis: [4, 7, 11, 14],
+      significado: "Positivo: segurança, estabilidade e persistência. Negativo: estagnação, apego e resistência ao progresso."
       },
       {
-        nome: "A Cruz", tag: "desafios",
-        arcanosFavoraveis: [5, 12, 13, 20],
-        significado: "Positivo: superação, aprendizado e fortalecimento. Negativo: preocupações, dificuldades e responsabilidades pesadas."
+      nome: "A Cruz", tag: "desafios",
+      arcanosFavoraveis: [5, 12, 13, 20],
+      significado: "Positivo: superação, aprendizado e fortalecimento. Negativo: preocupações, dificuldades e responsabilidades pesadas."
       }
-    ];
-
+     ];
+     class SistemaBaralho {
+      constructor(cartas) {
+        this.cartas = cartas;
+      }
+    
+      filtrarCartas(tema) {
+        return this.cartas.filter(carta => carta.tag === tema);
+      }
+    
+      calcularPeso(carta, arcano) {
+        return carta.arcanosFavoraveis.includes(arcano) ? 3 : 1;
+      }
+    
+      sortearCarta(disponiveis, arcano) {
+        const pesos = disponiveis.map(carta => this.calcularPeso(carta, arcano));
+        const total = pesos.reduce((a, b) => a + b, 0);
+        let sorteio = Math.random() * total;
+    
+        for (let i = 0; i < disponiveis.length; i++) {
+          sorteio -= pesos[i];
+          if (sorteio < 0) return disponiveis[i];
+        }
+        return disponiveis[disponiveis.length - 1];
+      }
+    
+      consultar(tema, arcano) {
+        let disponiveis = this.filtrarCartas(tema);
+        const resultado = [];
+    
+        for (let i = 0; i < 3 && disponiveis.length > 0; i++) {
+          const carta = this.sortearCarta(disponiveis, arcano);
+          resultado.push(carta);
+          disponiveis = disponiveis.filter(c => c !== carta);
+        }
+        return resultado;
+      }
+    }
+    
+    if (arcano !== null) {
+      const sistema = new SistemaBaralho(baralho);
+    
+      const opcao = prompt(
+        "Escolha o tema da sua consulta:\n\n" +
+        "1 - Amor\n2 - Trabalho\n3 - Dinheiro\n4 - Saúde\n" +
+        "5 - Família\n6 - Soluções\n7 - Desafios"
+      );
+    
+      const temas = {
+        "1": "amor", "2": "trabalho", "3": "dinheiro", "4": "saude",
+        "5": "familia", "6": "solucoes", "7": "desafios"
+      };
+    
+      const tagEscolhida = temas[opcao];
+    
+      if (!tagEscolhida) {
+        console.log("Tema inválido ou consulta cancelada.");
+      } else {
+        sistema.consultar(tagEscolhida, arcano).forEach((carta, i) => {
+          console.log(`Carta ${i + 1}: ${carta.nome}`);
+          console.log(carta.significado);
+        });
+      }
+    }
+    
